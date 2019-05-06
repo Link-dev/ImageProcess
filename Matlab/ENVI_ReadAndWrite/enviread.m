@@ -14,8 +14,8 @@ function [D,info]=enviread(datafile,hdrfile)
 if nargin < 1
     error('You must specify at least one input');
 elseif nargin <2
-    [path, dataName, extensionName] = fileparts(datafile);
-    if isempty(extensionName)
+    [path, dataName, ~] = fileparts(datafile);
+    if exist([deblank(datafile),'.hdr'], 'file')
         hdrfile=[deblank(datafile),'.hdr']; %implicit name
     else
         hdrfile=[deblank([path '/' dataName]),'.hdr']; 
