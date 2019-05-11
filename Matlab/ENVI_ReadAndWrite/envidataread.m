@@ -27,7 +27,7 @@ end
 iscx=false; %if it is complex
 switch info.data_type
     case {1}
-        format = 'int8';
+        format = 'uint8';
     case {2}
         format= 'int16';
     case{3}
@@ -83,9 +83,7 @@ end
 n = info.lines*info.samples*info.bands;
 
 fid=fopen(datafile,'r');
-if isfield(info,'header_offset')
-    fread(fid,info.header_offset,'uint8',0,machine); %we skip the header
-end
+fread(fid,info.header_offset,'uint8',0,machine); %we skip the header
 if ~iscx
     if strcmp(info.file_type, 'ENVI Classification')
         D = fread(fid,n,'uint8',0,machine);

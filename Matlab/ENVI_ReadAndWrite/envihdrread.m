@@ -108,6 +108,64 @@ if isfield(info,'map_info')
 %     info.y = ym - ((0:info.lines-1).*info.map_info.dy);
 end
 
+if isfield(info,'coordinate_system_string')
+    line = info.coordinate_system_string;
+    line(line == '{' | line == '}' | line == '"' | line == '[' ...
+        | line == ']') = [];
+    
+    %originally: line = strtrim(split(line,','));
+    %replaced by
+    line=textscan(line,'%s', 'Delimiter',','); %behavior is not quite the same if "line" ends in ','
+    line=line{:};
+    line=strtrim(line);
+    %
+    
+    info.coordinate_system = [];
+    
+    if contains(line{1},'UTM')
+        info.coordinate_system.PROJCS = extractAfter(line{1},6);
+        
+        info.coordinate_system.GEOGCS = extractAfter(line{2},6);
+        info.coordinate_system.DATUM = extractAfter(line{3},5);
+        info.coordinate_system.SPHEROID = [];
+        info.coordinate_system.SPHEROID.datum = extractAfter(line{4},8);
+        info.coordinate_system.SPHEROID.a  = line{5};
+        info.coordinate_system.SPHEROID.e  = line{6};
+        info.coordinate_system.PRIMEM = extractAfter(line{7},6);
+        info.coordinate_system.PMlongToGreenwich = line{8};
+        info.coordinate_system.UNITGeo = extractAfter(line{9},4);
+        info.coordinate_system.UNITGeo_value = line{10};
+        
+        info.coordinate_system.PROJECTION = extractAfter(line{11},10);
+        info.coordinate_system.PARAMETER1 = extractAfter(line{12},9);
+        info.coordinate_system.PARAMETER1_value = line{13};
+        info.coordinate_system.PARAMETER2 = extractAfter(line{14},9);
+        info.coordinate_system.PARAMETER2_value = line{15};
+        info.coordinate_system.PARAMETER3 = extractAfter(line{16},9);
+        info.coordinate_system.PARAMETER3_value = line{17};
+        info.coordinate_system.PARAMETER4 = extractAfter(line{18},9);
+        info.coordinate_system.PARAMETER4_value = line{19};
+        info.coordinate_system.PARAMETER5 = extractAfter(line{20},9);
+        info.coordinate_system.PARAMETER5_value = line{21};
+        info.coordinate_system.UNITPro = extractAfter(line{22},4);
+        info.coordinate_system.UNITPro_value = line{23};
+        
+    elseif strcmp(info.map_info.projection, 'Geographic Lat/Lon')
+        info.coordinate_system.GEOGCS = extractAfter(line{1},6);
+        info.coordinate_system.DATUM = extractAfter(line{2},5);
+        info.coordinate_system.SPHEROID = [];
+        info.coordinate_system.SPHEROID.datum = extractAfter(line{3},8);
+        info.coordinate_system.SPHEROID.a  = line{4};
+        info.coordinate_system.SPHEROID.e  = line{5};
+        info.coordinate_system.PRIMEM = extractAfter(line{6},6);
+        info.coordinate_system.PMlongToGreenwich = line{7};
+        info.coordinate_system.UNITGeo = extractAfter(line{8},4);
+        info.coordinate_system.UNITGeo_value = line{9};
+    end
+
+end
+
+
 if isfield(info,'pixel_size')
     line = info.pixel_size;
     line(line == '{' | line == '}') = [];
