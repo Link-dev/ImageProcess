@@ -84,6 +84,8 @@ for idx=1:length(params)
             fprintf(fid, 'units = %s', value.units);
         end
         fprintf(fid, '}\n');
+    elseif strcmp(param, 'coordinate system')
+        continue;
     else
         line=[param,' = ',value];
     end
