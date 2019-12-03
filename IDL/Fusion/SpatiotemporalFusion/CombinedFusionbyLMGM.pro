@@ -36,7 +36,7 @@ pro CombinedFusionByLMGM
   winS=3                       ;set the half window size
   scale_factor=16.0              ;set the scale factor, it is integer=coarse resolution/fine resolution, e.g., 480/30=16
 
-  Basename = 'G:\PrivateFiles\2018秋季课程\遥感数字图像处理\NDVI_LMGM\data\Time_series\'
+  Basename = 'G:\'
   
   ;open the first coarse NDVI
   CoarseNDVI1 = Basename + 'T1_480_NDVI'
